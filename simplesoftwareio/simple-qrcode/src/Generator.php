@@ -21,8 +21,10 @@ use BaconQrCode\Renderer\Image\ImageBackEndInterface;
 use BaconQrCode\Renderer\Image\ImagickImageBackEnd;
 use BaconQrCode\Renderer\Image\SvgImageBackEnd;
 use BaconQrCode\Renderer\ImageRenderer;
+use BaconQrCode\Renderer\Module\CuboidalModule;
 use BaconQrCode\Renderer\Module\DiamondModule;
 use BaconQrCode\Renderer\Module\DotsModule;
+use BaconQrCode\Renderer\Module\HexagonalModule;
 use BaconQrCode\Renderer\Module\ModuleInterface;
 use BaconQrCode\Renderer\Module\RoundnessModule;
 use BaconQrCode\Renderer\Module\SquareModule;
@@ -358,7 +360,7 @@ class Generator
      */
     public function style(string $style, float $size = 0.5): self
     {
-        if (! in_array($style, ['square', 'dot', 'round', 'diamond'])) {
+        if (! in_array($style, ['square', 'dot', 'round', 'diamond','hexagonal','cuboidal'])) {
             throw new InvalidArgumentException("\$style must be square, dot, or round. {$style} is not a valid.");
         }
 
@@ -486,12 +488,17 @@ class Generator
         if ($this->style === 'dot') {
             return new DotsModule($this->styleSize);
         }
-
         if ($this->style === 'round') {
             return new RoundnessModule($this->styleSize);
         }
         if ($this->style === 'diamond') {
             return new DiamondModule($this->styleSize);
+        }
+        if ($this->style === 'hexagonal') {
+            return new HexagonalModule($this->styleSize);
+        }
+        if ($this->style === 'cuboidal') {
+            return new CuboidalModule($this->styleSize);
         }
 
         return SquareModule::instance();
